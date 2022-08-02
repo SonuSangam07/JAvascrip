@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="saveToLocalStorage(event)">
+        <label>Choose expenseamount</label>
+        <input id='expenseamount'type="number" name="expenseamount" required/>
+        <label>Choose description</label>
+        <input id='description'type="text" name="description" required>
+        <label>Choose a category</label>
+        <select name="category" id="category">
+            <option value="fuel">Fuel</option>
+            <option value="food">Food</option>
+            <option value="electricity">Electricity</option>
+            <option value="movie">Movie</option>
+        </select>
+        <button>Add Expense</button>
+    </form>
+    <ul id='listOfUser'></ul>
+    
+    <script>
+        function saveToLocalStorage(event){
+            event.preventDefault();
+          const eamount=event.target.expenseamount.value;
+          const descript=event.target.description.value;
+          const Category=event.target.category.value;
+         // localStorage.setItem('eamount',eamount);
+         // localStorage.setItem('descript',descript);
+         // localStorage.setItem('category',category);
+         const obj={
+            eamount,
+            descript,
+            Category
+         }
+         localStorage.setItem(obj.eamount,JSON.stringify(obj))
+         showUserOnScreen(obj)
+          }
+          function showUserOnScreen(user){
+            const parentNode=document.getElementById('listOfUser');
+            const childHTML=`<li id=${user.eamount}> ${user.eamount}-${user.descript}-${user.Category} 
+                <button onclick=deleteUser('${user.eamount}')> Delete Expense </botton><button  onclick=editUserDetails('${user.eamount}','${user.descript}','${user.Category}')>Edit Expense</button>
+                </li>`
+            parentNode.innerHTML=parentNode.innerHTML + childHTML;
+          }
+         function deleteUser(eamount){
+           console.log(eamount);
+            localStorage.removeItem(eamount);
+         removeUserFromScreen(eamount);
+          }
+         function removeUserFromScreen(eamount){
+            const parentNode=document.getElementById('listOfUser');
+          const childNodeTobedeleted=document.getElementById(eamount);
+
+           parentNode.removeChild(childNodeTobedeleted);
+         }
+        function editUserDetails(eamount,descript,category){
+            document.getElementById('expenseamount').value=eamount;
+            document.getElementById('description').value=descript;
+            document.getElementById('category').value=category;
+             deleteUser(eamount);
+        }
+
+       
+    </script>
+</body>
+</html>
